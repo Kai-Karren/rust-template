@@ -1,0 +1,10 @@
+FROM rust as builder
+WORKDIR template
+COPY . .
+RUN cargo build --release
+#RUN echo $(ls -1 target/release)
+
+FROM rust as runtime
+COPY --from=builder /template/target/release/template /usr/local/bin
+
+ENTRYPOINT ["./usr/local/bin/template"]
